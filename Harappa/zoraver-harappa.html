@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ZORAVER — HARAPPA</title>
+<link rel="stylesheet" href="zoraver-harappa.css">
+
+</head>
+<body>
+
+<!-- ══════════════════════════════════
+     FLASH OVERLAY (explosion)
+══════════════════════════════════ -->
+<div class="flash-overlay" id="flashOverlay"></div>
+
+<!-- ══════════════════════════════════
+     MODALS
+══════════════════════════════════ -->
+<!-- Letter Modal -->
+<div class="modal-wrap" id="modalLetter">
+  <div class="modal">
+    <div class="modal-head">
+      <div>
+        <div class="label" style="margin-bottom:0.5rem">Object 01 — Field notes</div>
+        <div class="heading" style="font-size:1.1rem">Masson's Torn Letter</div>
+      </div>
+      <button class="modal-close" onclick="closeModal('modalLetter')">✕</button>
+    </div>
+    <div class="body-text" style="color:var(--blue2); font-size:0.8rem">
+      Four fragments. Click them in the correct reading order — the passage must form a continuous account.
+    </div>
+    <div class="fragment-grid" id="fragGrid">
+      <!-- Fragments injected by JS -->
+    </div>
+    <div id="letterMsg" style="height:1.2rem"></div>
+    <button class="btn amber" id="letterDoneBtn" disabled onclick="confirmLetter()">Confirm Reading Order</button>
+  </div>
+</div>
+
+<!-- Telegram Modal -->
+<div class="modal-wrap" id="modalTelegram">
+  <div class="modal">
+    <div class="modal-head">
+      <div>
+        <div class="label" style="margin-bottom:0.5rem">Object 02 — Coded telegram</div>
+        <div class="heading" style="font-size:1.1rem">Department Cipher</div>
+      </div>
+      <button class="modal-close" onclick="closeModal('modalTelegram')">✕</button>
+    </div>
+    <div class="body-text" style="color:var(--blue2); font-size:0.8rem">A1Z26 cipher. Each number is a letter of the alphabet. Decode the final word.</div>
+    <div>
+      <div class="label" style="margin-bottom:0.6rem">Incoming transmission</div>
+      <div class="cipher-msg">HARAPPA · 15-1-20-5 · 19-5-1-12-5-4 · 2-18-1-8-21-9 · 23-1-18-14</div>
+    </div>
+    <div>
+      <div class="label" style="margin-bottom:0.6rem">What does the final word decode to?</div>
+      <div class="cipher-choices" id="cipherChoices">
+        <button class="cipher-choice" onclick="checkCipher(this, false)">WASTE — the site was already stripped bare</button>
+        <button class="cipher-choice" onclick="checkCipher(this, true)">WARN — the Brahui issued a warning</button>
+        <button class="cipher-choice" onclick="checkCipher(this, false)">WATER — a river runs beneath the mounds</button>
+      </div>
+    </div>
+    <div id="telegramMsg" style="height:1.2rem"></div>
+  </div>
+</div>
+
+<!-- Seal Modal -->
+<div class="modal-wrap" id="modalSeal">
+  <div class="modal">
+    <div class="modal-head">
+      <div>
+        <div class="label" style="margin-bottom:0.5rem">Object 03 — Recovered artefact</div>
+        <div class="heading" style="font-size:1.1rem">Terracotta Seal</div>
+      </div>
+      <button class="modal-close" onclick="closeModal('modalSeal')">✕</button>
+    </div>
+    <div class="body-text" style="color:var(--blue2); font-size:0.8rem">Identify this object. Era, provenance, and civilisation.</div>
+    <div class="seal-svg-wrap">
+      <!-- Indus Valley unicorn seal — SVG recreation -->
+      <svg width="160" height="160" viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg" style="border:1px solid rgba(74,122,155,0.3); background:rgba(10,21,32,0.5)">
+        <!-- Border -->
+        <rect x="8" y="8" width="144" height="144" fill="none" stroke="#4a7a9b" stroke-width="1.5"/>
+        <!-- Unicorn body -->
+        <path d="M40 110 Q50 90 70 85 Q90 82 105 90 Q120 98 118 108 Q116 118 100 118 Q80 122 60 118 Q45 115 40 110Z" fill="none" stroke="#7aafc8" stroke-width="1.5"/>
+        <!-- Legs -->
+        <line x1="60" y1="118" x2="57" y2="132" stroke="#7aafc8" stroke-width="1.5"/>
+        <line x1="75" y1="120" x2="73" y2="133" stroke="#7aafc8" stroke-width="1.5"/>
+        <line x1="90" y1="120" x2="89" y2="133" stroke="#7aafc8" stroke-width="1.5"/>
+        <line x1="103" y1="118" x2="102" y2="132" stroke="#7aafc8" stroke-width="1.5"/>
+        <!-- Head and neck -->
+        <path d="M40 110 Q34 100 36 88 Q38 78 48 76 Q56 75 60 82 Q62 88 58 94 Q52 100 44 104 Q42 107 40 110Z" fill="none" stroke="#7aafc8" stroke-width="1.5"/>
+        <!-- Horn -->
+        <line x1="46" y1="76" x2="36" y2="58" stroke="#7aafc8" stroke-width="1.5"/>
+        <!-- Eye -->
+        <circle cx="42" cy="84" r="2" fill="#7aafc8"/>
+        <!-- Manger/feeding trough (common on Indus seals) -->
+        <path d="M55 130 Q70 135 85 130" fill="none" stroke="#4a7a9b" stroke-width="1.2"/>
+        <line x1="55" y1="130" x2="52" y2="140" stroke="#4a7a9b" stroke-width="1.2"/>
+        <line x1="85" y1="130" x2="88" y2="140" stroke="#4a7a9b" stroke-width="1.2"/>
+        <!-- Script symbols above -->
+        <text x="20" y="50" font-family="monospace" font-size="9" fill="#4a7a9b">𐤀 𐤁 𐤂 𐤃 𐤄 𐤆 𐤇</text>
+        <!-- Border script row -->
+        <text x="14" y="148" font-family="monospace" font-size="7" fill="#2a4f6e" letter-spacing="4">⌇⌗⌙⌖⌑⌒⌕⌏⌐⌘</text>
+      </svg>
+    </div>
+    <div class="seal-opts" id="sealOpts">
+      <button class="seal-opt" onclick="checkSeal(this, false)">
+        <span class="seal-era">Egypt · New Kingdom · 1550–1070 BCE</span>
+        A pharaonic cartouche seal used to mark royal property
+      </button>
+      <button class="seal-opt" onclick="checkSeal(this, true)">
+        <span class="seal-era">Indus Valley · Mature Harappan · 2600–1900 BCE</span>
+        An administrative seal from a planned urban civilisation — script undeciphered
+      </button>
+      <button class="seal-opt" onclick="checkSeal(this, false)">
+        <span class="seal-era">Mesopotamia · Ur III Period · 2112–2004 BCE</span>
+        A cylinder seal used to authenticate clay tablets
+      </button>
+      <button class="seal-opt" onclick="checkSeal(this, false)">
+        <span class="seal-era">Achaemenid Persia · 6th–4th Century BCE</span>
+        A stamp seal from the imperial administration of Darius
+      </button>
+    </div>
+    <div id="sealMsg" style="height:1.2rem"></div>
+  </div>
+</div>
+
+<!-- Hypothesis Modal -->
+<div class="modal-wrap" id="modalHyp">
+  <div class="modal">
+    <div class="modal-head">
+      <div>
+        <div class="label" style="margin-bottom:0.5rem">Assessment — Present findings</div>
+        <div class="heading" style="font-size:1.1rem">What does Harappa hold?</div>
+      </div>
+    </div>
+    <div class="body-text" style="color:var(--blue2); font-size:0.83rem">
+      Cross-reference all three objects. The letter, the telegram, the seal. Select the correct hypothesis to bring to your superior.
+    </div>
+    <div class="hyp-choices">
+      <button class="hyp-btn" onclick="checkHyp(this, false)">
+        A Buddhist monastery complex, 3rd century BCE — sealed by monks fleeing invasion
+      </button>
+      <button class="hyp-btn" onclick="checkHyp(this, true)">
+        An Indus Valley city, circa 1900 BCE — sealed from the inside by its own inhabitants. The Brahui are its last descendants. The gate in the upper citadel has never been opened.
+      </button>
+      <button class="hyp-btn" onclick="checkHyp(this, false)">
+        A Vedic fire-altar complex, 1500 BCE — ritual sealing after a ceremony of cosmic significance
+      </button>
+      <button class="hyp-btn" onclick="checkHyp(this, false)">
+        A Persian satrapy administrative post, 500 BCE — abandoned during Alexander's campaigns
+      </button>
+    </div>
+    <div id="hypMsg" style="height:1.2rem"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     SCREEN 0 — TITLE
+══════════════════════════════════ -->
+<div class="screen active" id="screen-open">
+  <div class="open-img">
+    <img src="../Game Images/3_5.jpg" alt="Zoraver">
+  </div>
+  <div class="open-ui">
+    <div>
+      <div class="open-sub" style="margin-bottom:1.2rem">A game slice</div>
+      <div class="open-title">ZORAVER</div>
+    </div>
+    <div class="rule"></div>
+    <div class="open-sub">Harappa · Punjab · 1913</div>
+    <div class="open-desc">
+      You have been sent here by the Department. Your orders are clear. The gate in the upper citadel has never been opened. Your job is to open it.
+      <br><br>
+      You are the sniffer.
+    </div>
+    <div style="display:flex; flex-direction:column; gap:0.75rem; margin-top:0.5rem">
+      <button class="btn amber lg" onclick="goTo('stage-1')">Begin</button>
+      <div class="label" style="margin-top:0.35rem; opacity:0.5">Five stages · Harappa slice</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     STAGE 1 — MASSON'S FILES
+══════════════════════════════════ -->
+<div class="screen" id="stage-1">
+  <div class="split wide">
+    <div class="pane-img">
+      <img src="../Game Images/1_7.jpg" alt="Departure">
+    </div>
+    <div class="pane-ui">
+      <div class="label">Stage 01 — Masson's Files</div>
+      <div class="rule"></div>
+      <div class="heading">Three objects<br>on the table.</div>
+      <div class="body-text" style="font-size:0.83rem">
+        Gloria has left you the briefing. Examine each object before you go. Cross-reference them. The Department does not send you in blind.
+      </div>
+      <div class="object-row">
+        <div class="obj-card" id="objLetter" onclick="openModal('modalLetter')">
+          <div class="obj-glyph">📜</div>
+          <div class="obj-type">Field notes · 1842</div>
+          <div class="obj-name">Masson's Torn Letter</div>
+        </div>
+        <div class="obj-card" id="objTelegram" onclick="openModal('modalTelegram')">
+          <div class="obj-glyph">⚡</div>
+          <div class="obj-type">Coded transmission</div>
+          <div class="obj-name">Department Telegram</div>
+        </div>
+        <div class="obj-card" id="objSeal" onclick="openModal('modalSeal')">
+          <div class="obj-glyph">🔷</div>
+          <div class="obj-type">Recovered artefact</div>
+          <div class="obj-name">Terracotta Seal</div>
+        </div>
+      </div>
+      <div id="stage1Progress" class="label" style="opacity:0.5">0 of 3 examined</div>
+      <button class="btn amber" id="presentBtn" disabled onclick="openModal('modalHyp')">
+        Present Findings to Superior
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     STAGE 2 — THE MAPS
+══════════════════════════════════ -->
+<div class="screen" id="stage-2">
+  <div class="map-container">
+    <div class="map-bg">
+      <img src="../Game Images/1_15.jpg" alt="Maps briefing">
+    </div>
+    <div class="map-ui">
+      <!-- Left: interactive map -->
+      <div class="map-svg-pane">
+        <div class="label" style="text-align:center; margin-bottom:0.5rem">Harappa Site — Excavation Map</div>
+        <svg id="harappaSVG" width="320" height="320" viewBox="0 0 320 320" xmlns="http://www.w3.org/2000/svg" style="border:1px solid rgba(74,122,155,0.3); background:rgba(10,21,32,0.7)">
+          <!-- Grid lines -->
+          <defs><pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M 20 0 L 0 0 0 20" fill="none" stroke="rgba(74,122,155,0.12)" stroke-width="0.5"/></pattern></defs>
+          <rect width="320" height="320" fill="url(#grid)"/>
+          <!-- River (west) -->
+          <path d="M10 60 Q18 120 12 200 Q8 250 15 310" fill="none" stroke="#4a7a9b" stroke-width="3" opacity="0.5"/>
+          <text x="16" y="180" font-family="monospace" font-size="7" fill="#4a7a9b" opacity="0.5" transform="rotate(-80,16,180)">RAVI RIVER</text>
+          <!-- Lower City boundary -->
+          <rect id="lowerCity" x="60" y="160" width="200" height="130" fill="rgba(30,61,88,0.2)" stroke="#4a7a9b" stroke-width="1.2" stroke-dasharray="4,3"/>
+          <text x="140" y="230" text-anchor="middle" font-family="monospace" font-size="8" fill="#4a7a9b">LOWER CITY</text>
+          <text x="140" y="242" text-anchor="middle" font-family="monospace" font-size="6" fill="rgba(74,122,155,0.5)">Residential · Trade</text>
+          <!-- Upper Citadel boundary -->
+          <rect id="upperCity" x="70" y="30" width="160" height="110" fill="rgba(74,122,155,0.08)" stroke="#7aafc8" stroke-width="1.5" stroke-dasharray="5,3"/>
+          <text x="150" y="80" text-anchor="middle" font-family="monospace" font-size="8" fill="#7aafc8">UPPER CITADEL</text>
+          <text x="150" y="92" text-anchor="middle" font-family="monospace" font-size="6" fill="rgba(122,175,200,0.5)">Administrative · Ritual</text>
+          <!-- The Gate -->
+          <rect x="136" y="28" width="28" height="6" fill="none" stroke="#c8a050" stroke-width="1.5"/>
+          <text x="150" y="23" text-anchor="middle" font-family="monospace" font-size="6" fill="#c8a050">THE GATE</text>
+          <!-- Drop zones on SVG (visual only, actual drop zones are HTML overlaid) -->
+        </svg>
+        <!-- Token tray -->
+        <div style="margin-top:1rem">
+          <div class="label" style="margin-bottom:0.5rem; text-align:center">Drag artefacts to the correct zone</div>
+          <div class="token-tray" id="tokenTray">
+            <div class="token" id="t-seal" draggable="true" ondragstart="dragToken(event,'seal')" ondragend="endDrag(event)">
+              🔷<span>Seal</span>
+            </div>
+            <div class="token" id="t-pottery" draggable="true" ondragstart="dragToken(event,'pottery')" ondragend="endDrag(event)">
+              🏺<span>Pottery</span>
+            </div>
+            <div class="token" id="t-weight" draggable="true" ondragstart="dragToken(event,'weight')" ondragend="endDrag(event)">
+              ⚖️<span>Weights</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Right: info + drop zones -->
+      <div class="map-panel">
+        <div class="label">Stage 02 — The Maps</div>
+        <div class="rule"></div>
+        <div class="heading" style="font-size:1.3rem">Read the site.<br>Place each find.</div>
+        <div class="body-text" style="font-size:0.82rem">
+          Every morning, the day's finds are laid out. Identify where each artefact belongs — upper citadel or lower city. Get it wrong and you go to the wrong part of the site.
+        </div>
+        <!-- Drop zone: Upper Citadel -->
+        <div>
+          <div class="drop-zone-label">Upper Citadel — Administrative</div>
+          <div class="drop-zone" id="dz-upper"
+            ondragover="allowDrop(event)"
+            ondragleave="leaveDrop(event)"
+            ondrop="dropToken(event,'upper')">
+            <span style="font-family:monospace; font-size:0.68rem; color:rgba(74,122,155,0.4)">Drop artefacts here</span>
+          </div>
+        </div>
+        <!-- Drop zone: Lower City -->
+        <div>
+          <div class="drop-zone-label">Lower City — Residential &amp; Trade</div>
+          <div class="drop-zone" id="dz-lower"
+            ondragover="allowDrop(event)"
+            ondragleave="leaveDrop(event)"
+            ondrop="dropToken(event,'lower')">
+            <span style="font-family:monospace; font-size:0.68rem; color:rgba(74,122,155,0.4)">Drop artefacts here</span>
+          </div>
+        </div>
+        <div id="mapMsg" style="height:1.2rem"></div>
+        <button class="btn amber" id="mapNextBtn" disabled onclick="goTo('stage-3')">Proceed to the Site</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     STAGE 3 — THE SEAL PUZZLE
+══════════════════════════════════ -->
+<div class="screen" id="stage-3">
+  <div class="door-container">
+    <div class="door-bg">
+      <img src="../Game Images/1_16.jpg" alt="The door">
+    </div>
+    <div class="door-overlay">
+      <!-- Reference (target) -->
+      <div class="ref-pane">
+        <div class="label" style="text-align:right">Stage 03 — The Seal</div>
+        <div class="rule" style="margin-left:auto"></div>
+        <div class="body-text" style="font-size:0.78rem; text-align:right; max-width:180px; color:var(--blue2)">
+          The seals on the door can move. Match the arrangement shown — Masson saw it in the stars above Harappa.
+        </div>
+        <div class="label" style="text-align:right; margin-top:0.5rem">Target pattern</div>
+        <div class="ref-grid" id="refGrid">
+          <!-- Reference tiles injected by JS -->
+        </div>
+        <div id="puzzleMsg" style="text-align:right; height:1.2rem"></div>
+      </div>
+      <!-- Sliding puzzle -->
+      <div class="puzzle-pane">
+        <div class="label">Rearrange the seals</div>
+        <div class="rule"></div>
+        <div class="body-text" style="font-size:0.78rem; color:var(--blue2)">
+          Click a tile adjacent to the empty space to slide it. Eight tiles, one solution.
+        </div>
+        <div class="slide-grid" id="slideGrid">
+          <!-- Tiles injected by JS -->
+        </div>
+        <button class="btn" onclick="shufflePuzzle()" style="font-size:0.62rem">Reshuffle</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     STAGE 4 — THE DOOR
+══════════════════════════════════ -->
+<div class="screen" id="stage-4">
+  <div class="door-choice-bg">
+    <img src="../Game Images/1_14.jpg" alt="Cave entrance">
+  </div>
+  <div class="door-choice-ui">
+    <div class="label" style="opacity:0.6">Stage 04 — The Door</div>
+    <div class="heading" style="font-size:1.5rem; text-align:center">The seal is solved.<br>The door can open.</div>
+    <div class="body-text" style="text-align:center; max-width:460px; font-size:0.85rem">
+      Andrews is waiting outside. The Department's order is clear. But at the edge of camp a figure stands, motioning. The Brahui do not come here. Tonight, one has.
+    </div>
+    <div class="door-choices">
+      <button class="btn danger lg" onclick="badEnding()">Open the door. Follow orders.</button>
+      <button class="btn amber lg" onclick="goTo('stage-5')">Follow the figure.</button>
+    </div>
+    <div class="label" style="opacity:0.3; margin-top:0.5rem">One path is not recoverable.</div>
+  </div>
+  <!-- Bad ending overlay -->
+  <div class="bad-end" id="badEnd">
+    <div class="fog-text">Harappa · Dawn</div>
+    <div class="heading" style="font-size:1.4rem; text-align:center">The door opened.</div>
+    <div class="body-text" style="text-align:center; max-width:440px; color:var(--pale)">
+      A yellow fog rolled through the camp at dawn. Andrews had his clipboard. The sepoys were already outside. You had your orders.
+      <br><br>
+      They did not prepare you for what came next.
+    </div>
+    <div class="fog-text" style="color:rgba(212,200,68,0.5); margin-top:1rem">What the Brahui knew — you did not.</div>
+    <button class="btn" style="margin-top:1rem" onclick="restartDoor()">↩ Return to the door</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     STAGE 5 — THE FLASHBACK
+══════════════════════════════════ -->
+<div class="screen" id="stage-5">
+  <div class="flash-container">
+    <div class="flash-image-strip" id="flashImgStrip">
+      <div class="flash-img" id="fi-0"><img src="../Game Images/8.jpg" alt="Brahui figure"></div>
+      <div class="flash-img" id="fi-1"><img src="../Game Images/2_16.jpg" alt="Following the figure"></div>
+      <div class="flash-img" id="fi-2"><img src="../Game Images/1_10.jpg" alt="Brahui camp"></div>
+      <div class="flash-img" id="fi-3"><img src="../Game Images/1_12.jpg" alt="Zoraver wakes"></div>
+    </div>
+    <div class="flash-ui">
+      <div class="label">Stage 05 — The Flashback</div>
+      <div class="body-text" style="font-size:0.8rem; color:var(--blue2)">
+        The drink takes hold. Three visions arrive out of order. Arrange them — the sequence matters. What you know now determines what you carry onto that train.
+      </div>
+      <!-- Vision cards (draggable) -->
+      <div class="vision-hand" id="visionHand">
+        <div class="vision-card" id="vc-A" draggable="true"
+          ondragstart="dragVision(event,'A')" ondragend="endVisionDrag(event)">
+          "The fog will spread far beyond this plain. Those who breathe it will be changed. Millions. The door was made to contain it — not to be opened."
+        </div>
+        <div class="vision-card" id="vc-B" draggable="true"
+          ondragstart="dragVision(event,'B')" ondragend="endVisionDrag(event)">
+          "You are standing over a body. A knife in your hand. You cannot look away. You cannot change it. It is not a warning. It is a fact."
+        </div>
+        <div class="vision-card" id="vc-C" draggable="true"
+          ondragstart="dragVision(event,'C')" ondragend="endVisionDrag(event)">
+          "The Brahui have kept this place since before memory. The civilisation sealed it themselves. They understood what they had built. They chose to leave it closed."
+        </div>
+      </div>
+      <!-- Drop slots -->
+      <div class="vision-row">
+        <div class="vision-slot" id="vs-1"
+          ondragover="allowVisionDrop(event)"
+          ondragleave="leaveVisionDrop(event)"
+          ondrop="dropVision(event,1)">
+          <span class="slot-num">01</span>
+          <span class="slot-correct">✓</span>
+          <span style="font-family:monospace; font-size:0.62rem; color:rgba(74,122,155,0.3)">First vision</span>
+        </div>
+        <div class="vision-slot" id="vs-2"
+          ondragover="allowVisionDrop(event)"
+          ondragleave="leaveVisionDrop(event)"
+          ondrop="dropVision(event,2)">
+          <span class="slot-num">02</span>
+          <span class="slot-correct">✓</span>
+          <span style="font-family:monospace; font-size:0.62rem; color:rgba(74,122,155,0.3)">Second vision</span>
+        </div>
+        <div class="vision-slot" id="vs-3"
+          ondragover="allowVisionDrop(event)"
+          ondragleave="leaveVisionDrop(event)"
+          ondrop="dropVision(event,3)">
+          <span class="slot-num">03</span>
+          <span class="slot-correct">✓</span>
+          <span style="font-family:monospace; font-size:0.62rem; color:rgba(74,122,155,0.3)">Third vision</span>
+        </div>
+      </div>
+      <div style="display:flex; justify-content:space-between; align-items:center">
+        <div id="visionMsg" style="height:1.2rem"></div>
+        <button class="btn amber" id="visionDoneBtn" disabled onclick="flashbackComplete()">I understand what I saw</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     ENDING — Otto on the train
+══════════════════════════════════ -->
+<div class="screen" id="screen-end">
+  <div class="end-bg">
+    <img src="../Game Images/1_9.jpg" alt="The train">
+  </div>
+  <div class="end-ui">
+    <div class="end-otto">Returning to Calcutta · The train · Morning</div>
+    <div class="rule"></div>
+    <div class="end-line">
+      A man sits next to you. You have not seen him before. He speaks quickly, as if he has only a day or two.
+    </div>
+    <div class="end-quote">
+      "I only want a few. And I will give you two things — some money for you and your family, safe passage to Berlin if needed, and a little bit of the truth."
+    </div>
+    <div class="label" style="margin-top:0.5rem; opacity:0.5">His name is Otto. He is German.</div>
+    <button class="btn amber" style="margin-top:1rem" onclick="goTo('screen-open')">Begin again</button>
+  </div>
+</div>
+
+
+<script src="zoraver-harappa.js"></script>
+</body>
+</html>

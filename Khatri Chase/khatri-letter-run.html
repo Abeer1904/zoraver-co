@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Zoraver — The Letter Run</title>
+<link rel="stylesheet" href="khatri-letter-run.css" />
+</head>
+<body>
+
+<!-- INTRO SCREEN -->
+<div id="introScreen">
+  <img class="intro-bg" src="Art Work/1-4/Chapter 1 Folder/Links/1.jpg" alt="" />
+  <div class="intro-noise"></div>
+  <div class="intro-vignette"></div>
+  <div class="intro-card">
+    <div class="intro-eyebrow">Chapter I &nbsp;·&nbsp; London, 1906</div>
+    <div class="intro-title">The Letter Run</div>
+    <div class="intro-sub">A Zoraver Story</div>
+    <div class="intro-rule"><span></span><i>✦</i><span></span></div>
+    <p class="intro-body">
+      Kishanlal Khatri carries a letter that could change the course of Indian politics.
+      Four men have been set on his trail. He must cross Waterloo district and reach
+      the post box before the hunters close in.
+    </p>
+    <div class="intro-cta">— Press any key to begin —</div>
+  </div>
+</div>
+
+<!-- GAME -->
+<div class="wrap">
+  <aside class="panel">
+    <div class="panel-art"></div>
+    <div class="panel-inner">
+      <div class="panel-tag">Zoraver &nbsp;·&nbsp; Chapter I</div>
+      <h1>The Letter Run</h1>
+      <div class="panel-city">Waterloo, London — Autumn 1906</div>
+      <div class="panel-rule"></div>
+      <p class="brief">Khatri must cross the Waterloo district, reach Blackfriars Road, and post the letter before the hunters close in.</p>
+
+      <h2>Controls</h2>
+      <div class="panel-controls">
+        <div class="control-row"><span class="kbd">WASD</span> Move</div>
+        <div class="control-row"><span class="kbd">Space</span> One-time decoy</div>
+        <div class="control-row"><span class="kbd">E</span> Hold at post box</div>
+        <div class="control-row"><span class="kbd">R</span> Restart</div>
+      </div>
+
+      <h2>Tactics</h2>
+      <p class="tactic-text">Open roads are fast but exposed. Crowd zones reduce enemy sight. Buildings block sight entirely. You have one decoy — use it wisely.</p>
+
+      <h2>Legend</h2>
+      <div class="legend">
+        <div class="legend-row"><span class="swatch" style="background:#243650;border:1px solid rgba(122,175,200,0.3)"></span>Street / road</div>
+        <div class="legend-row"><span class="swatch" style="background:#0d1e2f;border:1px solid rgba(74,122,155,0.5)"></span>Building / wall</div>
+        <div class="legend-row"><span class="swatch" style="background:rgba(200,160,80,0.35);border:1px solid rgba(200,160,80,0.45)"></span>Crowd cover</div>
+        <div class="legend-row"><span class="swatch" style="background:#b02121"></span>Red letter-box</div>
+        <div class="legend-row"><span class="swatch" style="background:#8b3030"></span>Pursuer</div>
+        <div class="legend-row"><span class="swatch" style="background:#c8a050"></span>Khatri</div>
+      </div>
+
+      <h2>Status</h2>
+      <div class="hud">
+        <div class="metric">
+          <strong>Global Alert</strong>
+          <div class="bar"><span id="alertFill"></span></div>
+        </div>
+        <div class="metric">
+          <strong>Posting Progress</strong>
+          <div class="bar post"><span id="postFill"></span></div>
+        </div>
+        <div class="metric">
+          <strong>Situation</strong>
+          <div id="statusText">Keep the letter hidden. Reach the post box.</div>
+        </div>
+        <div class="metric">
+          <strong>Decoy</strong>
+          <div id="decoyText">Available</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <main class="canvas-shell">
+    <canvas id="game" width="1280" height="780" tabindex="0"></canvas>
+    <div class="overlay" id="overlay" style="display:none;">
+      <div class="overlay-card" id="overlayCard">
+        <div class="overlay-inner">
+          <div class="overlay-eyebrow">Chapter I · London, 1906</div>
+          <h3>Post the letter.</h3>
+          <p>Break pursuit through the Waterloo streets, use corners and crowd cover, and hold position at the red post box long enough to drop the letter into the chain.</p>
+          <span class="overlay-restart">— Press any movement key to begin —</span>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script src="khatri-letter-run.js"></script>
+</body>
+</html>
