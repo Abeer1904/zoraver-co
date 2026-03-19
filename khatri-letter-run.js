@@ -394,7 +394,7 @@
         <h3>Captured.</h3>
         <p>The hunters reached Khatri before the letter entered the postal chain.
            The message will never reach its destination.</p>
-        <span class="overlay-restart">— Press R to try again —</span>
+        <span class="overlay-restart">— ${isTouchDevice ? 'Tap to try again' : 'Press R to try again'} —</span>
       </div>`;
   }
 
@@ -410,7 +410,7 @@
         <h3>Letter Posted.</h3>
         <p>Khatri has done enough. The letter is now beyond his hand and inside the chain —
            bound for Dadabai Naoroji and the cause beyond.</p>
-        <span class="overlay-restart">— Press R to replay —</span>
+        <span class="overlay-restart">— ${isTouchDevice ? 'Tap to replay' : 'Press R to replay'} —</span>
       </div>`;
   }
 
@@ -437,7 +437,7 @@
         <p>Cross the district, use crowd cover and building corners,
            and hold position at the red post box on Blackfriars Road
            long enough to drop the letter into the chain.</p>
-        <span class="overlay-restart">— Press any movement key to begin —</span>
+        <span class="overlay-restart">— ${isTouchDevice ? 'Tap to begin' : 'Press any movement key to begin'} —</span>
       </div>`;
     statusText.textContent = 'Keep the letter hidden. Reach the post box.';
   }
@@ -656,6 +656,24 @@
 
   if (isTouchDevice && touchControls) {
     touchControls.style.display = 'flex';
+
+    // ── Tap intro screen to dismiss ───────────────────────────────────
+    introScreen.addEventListener('touchstart', e => {
+      e.preventDefault();
+      dismissIntro();
+    }, { passive: false });
+
+    // ── Tap overlay to start / restart ────────────────────────────────
+    overlay.addEventListener('touchstart', e => {
+      e.preventDefault();
+      if (game.state === 'won' || game.state === 'lost') { resetGame(); return; }
+      if (!started) startGame();
+    }, { passive: false });
+    overlay.style.pointerEvents = 'auto';
+
+    // ── Update CTA text for mobile ────────────────────────────────────
+    const introCta = document.querySelector('.intro-cta');
+    if (introCta) introCta.textContent = '— Tap to begin —';
 
     // ── Joystick ──────────────────────────────────────────────────────
     joystickZone.addEventListener('touchstart', e => {
