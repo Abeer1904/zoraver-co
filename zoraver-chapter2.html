@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Zoraver — Chapter II · Bexhill 1906</title>
+<link rel="stylesheet" href="zoraver-chapter2.css" />
+</head>
+<body>
+
+<div id="fadeOverlay"></div>
+
+<!-- ═══════════════════════════════════════════
+     INTRO SCENE
+═════════════════════════════════════════════ -->
+<div id="sceneIntro" class="scene active">
+  <img class="intro-art" src="Game Images/Dadabai.jpg" alt="" />
+  <div class="intro-vignette"></div>
+  <div class="intro-card">
+    <div class="eyebrow">Zoraver · Chapter II</div>
+    <div class="intro-title">The Bexhill Meeting</div>
+    <div class="intro-subtitle">Bexhill-on-Sea &amp; Khatri Arrives · Autumn 1906</div>
+    <div class="amber-rule"></div>
+    <div class="intro-body">
+      A letter has arrived with a symbol Dadabhai Naoroji has not seen since childhood. Across town, Kishanlal Khatri waits in the dark, watching a single light in the window. Neither man knows that before dawn one of them will be travelling to Cambridge — to Zoraver.
+    </div>
+    <div class="amber-rule"></div>
+    <div style="font-family:'Courier New',monospace;font-size:9px;letter-spacing:0.2em;color:var(--blue2);margin-bottom:20px;">
+      PART I · Memory Puzzle &nbsp;/&nbsp; PART II · Route Infiltration &nbsp;/&nbsp; PART III · Convincing Duel
+    </div>
+    <button class="btn-primary" onclick="goToScene('part1')">Begin the Chapter</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     PART 1 — SYMBOL MEMORY PUZZLE
+═════════════════════════════════════════════ -->
+<div id="scenePart1" class="scene">
+  <div class="panel-header">
+    <img src="Game Images/Dadabai.jpg" alt="" />
+    <div class="panel-header-vignette"></div>
+    <div class="panel-header-text">
+      <div class="eyebrow">Part I · Bexhill-on-Sea, 1906</div>
+      <div class="scene-title">The Symbol in the Letter</div>
+    </div>
+  </div>
+
+  <div class="p1-layout">
+    <!-- LEFT: Inspectable clues -->
+    <div class="p1-letter-panel">
+      <div class="p1-letter-title">Inspect the Letter</div>
+      <div id="clueList"></div>
+      <div class="p1-feedback" id="p1Feedback">
+        Click an item to inspect it. Each detail may unlock a memory fragment.
+      </div>
+      <button class="p1-proceed" onclick="proceedFromPart1()">
+        Proceed → Cambridge
+      </button>
+    </div>
+
+    <!-- CENTRE: Memory fragments -->
+    <div class="p1-fragments-panel">
+      <div class="fragments-title">Memory Fragments — Taronwali Kothi</div>
+      <div class="fragments-grid" id="fragmentsGrid"></div>
+    </div>
+
+    <!-- RIGHT: Clarity meter -->
+    <div class="p1-clarity-panel">
+      <div class="clarity-meter-label">Memory Clarity</div>
+      <div class="clarity-track" id="clarityTrack"></div>
+      <div class="clarity-band" id="clarityBand">— Low —</div>
+      <div class="amber-rule" style="margin:8px 0;"></div>
+      <div style="font-family:'Courier New',monospace;font-size:8px;letter-spacing:0.15em;text-transform:uppercase;color:var(--blue2);margin-bottom:6px;">Recovered Words</div>
+      <div class="recovered-words" id="recoveredWords"></div>
+    </div>
+  </div>
+</div>
+
+<!-- TRANSITION 1 -->
+<div id="sceneTransition1" class="scene">
+  <img class="intro-art" src="Game Images/1.jpg" alt="" />
+  <div class="intro-vignette"></div>
+  <div class="intro-card">
+    <div class="eyebrow">Part II Begins</div>
+    <div class="intro-title" style="font-size:28px;">Outside in the Dark</div>
+    <div class="amber-rule"></div>
+    <div class="intro-body" id="t1Body">
+      The memory settles. Dadabhai sets down the letter and looks toward the door. Outside, a figure in the street has been standing too still for too long. The porch light is on — but not for much longer.
+    </div>
+    <div class="amber-rule"></div>
+    <div style="font-family:'Courier New',monospace;font-size:9px;color:var(--blue2);letter-spacing:0.15em;margin-bottom:20px;" id="t1Status"></div>
+    <button class="btn-primary" onclick="goToScene('part2')">Khatri Moves</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     PART 2 — TIMED ROUTE INFILTRATION
+═════════════════════════════════════════════ -->
+<div id="scenePart2" class="scene">
+  <div class="panel-header">
+    <img src="Game Images/1.jpg" alt="" />
+    <div class="panel-header-vignette"></div>
+    <div class="panel-header-text">
+      <div class="eyebrow">Part II · The Street · Night, 1906</div>
+      <div class="scene-title">Khatri's Run</div>
+    </div>
+  </div>
+
+  <div class="p2-layout">
+    <div class="p2-main">
+      <div class="p2-hud">
+        <div class="hud-item">
+          <div class="hud-label">Time Remaining</div>
+          <div class="hud-value" id="timerDisplay">15s</div>
+        </div>
+        <div class="timer-bar-wrap">
+          <div class="timer-bar" id="timerBar" style="width:100%"></div>
+        </div>
+        <div class="hud-item" style="margin-left:12px;">
+          <div class="hud-label">Progress</div>
+          <div class="hud-value" id="nodeProgress">1 / 5</div>
+        </div>
+      </div>
+
+      <div class="route-map">
+        <svg class="route-svg" id="routeSvg" viewBox="0 0 760 240"></svg>
+      </div>
+
+      <div>
+        <div class="p2-node-title" id="p2NodeTitle">Street Corner</div>
+        <div class="p2-node-desc" id="p2NodeDesc">Khatri stands at the end of the road. The house is visible — the light still on. He must choose how to proceed.</div>
+      </div>
+
+      <div class="action-bar" id="actionBar"></div>
+    </div>
+
+    <div class="p2-sidebar">
+      <div>
+        <div class="clarity-meter-label" style="margin-bottom:8px;">Suspicion</div>
+        <div class="suspicion-track" id="suspicionTrack"></div>
+      </div>
+      <div>
+        <div class="clarity-meter-label" style="color:var(--blue3);margin-bottom:8px;">Route Log</div>
+        <div class="route-log" id="routeLog"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TRANSITION 2 -->
+<div id="sceneTransition2" class="scene">
+  <img class="intro-art" src="Game Images/Dadabai.jpg" alt="" />
+  <div class="intro-vignette"></div>
+  <div class="intro-card">
+    <div class="eyebrow">Part III Begins</div>
+    <div class="intro-title" style="font-size:28px;">Inside the House</div>
+    <div class="amber-rule"></div>
+    <div class="intro-body" id="t2Body">
+      Khatri is inside. Dadabhai stands across the room, lamp still in hand, studying the visitor with the particular caution of a man who has learned that unexpected arrivals are rarely good news.
+    </div>
+    <div class="amber-rule"></div>
+    <div style="font-family:'Courier New',monospace;font-size:9px;color:var(--blue2);letter-spacing:0.15em;margin-bottom:20px;" id="t2Status"></div>
+    <button class="btn-primary" onclick="beginPart3()">The Conversation Begins</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     PART 3 — KEYWORD CONVINCING DUEL
+═════════════════════════════════════════════ -->
+<div id="scenePart3" class="scene">
+  <div class="panel-header">
+    <img src="Game Images/Dadabai.jpg" alt="" />
+    <div class="panel-header-vignette"></div>
+    <div class="panel-header-text">
+      <div class="eyebrow">Part III · Bexhill, Late Night</div>
+      <div class="scene-title">The Convincing</div>
+    </div>
+  </div>
+
+  <div class="p3-layout">
+    <div class="p3-main">
+      <div class="p3-scene-art">
+        <img src="Game Images/Dadabai.jpg" alt="" />
+        <div class="p3-scene-art-overlay"></div>
+        <div class="p3-scene-label" id="p3SceneLabel">Dadabhai's study — lamp on the desk</div>
+      </div>
+
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <div class="p3-turn-counter" id="turnCounter">Turn 1 of 8</div>
+        <div class="proof-anchors" id="proofAnchors"></div>
+      </div>
+
+      <div class="speech-bubble">
+        <div class="speaker-tag">Dadabhai Naoroji</div>
+        <div class="speech-text" id="dadabhaiSpeech"></div>
+        <div class="speech-context" id="dadabhaiContext"></div>
+      </div>
+
+      <div class="response-options" id="responseOptions"></div>
+    </div>
+
+    <div class="p3-sidebar">
+      <div class="meter-block">
+        <div class="meter-label">Trust</div>
+        <div class="meter-bar-wrap"><div class="meter-bar trust" id="mTrust" style="width:20%"></div></div>
+        <div class="meter-value" id="vTrust">2 / 10</div>
+      </div>
+      <div class="meter-block">
+        <div class="meter-label">Threat Credibility</div>
+        <div class="meter-bar-wrap"><div class="meter-bar threat" id="mThreat" style="width:10%"></div></div>
+        <div class="meter-value" id="vThreat">1 / 10</div>
+      </div>
+      <div class="meter-block">
+        <div class="meter-label">Patience</div>
+        <div class="meter-bar-wrap"><div class="meter-bar patience" id="mPatience" style="width:80%"></div></div>
+        <div class="meter-value" id="vPatience">4 / 5</div>
+      </div>
+      <div class="meter-block">
+        <div class="meter-label">Exposure</div>
+        <div class="meter-bar-wrap"><div class="meter-bar exposure" id="mExposure" style="width:20%"></div></div>
+        <div class="meter-value" id="vExposure">1 / 5</div>
+      </div>
+      <div class="amber-rule" style="margin:4px 0;"></div>
+      <div style="font-family:'Courier New',monospace;font-size:8px;letter-spacing:0.15em;text-transform:uppercase;color:var(--blue2);">Conversation Log</div>
+      <div class="p3-feedback-log" id="p3Log"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     ENDING SCENE
+═════════════════════════════════════════════ -->
+<div id="sceneEnding" class="scene">
+  <img class="intro-art" src="Game Images/Dadabai.jpg" alt="" />
+  <div class="intro-vignette"></div>
+  <div class="intro-card" id="endingCard">
+    <div class="eyebrow" id="endingEyebrow">Chapter II · Resolution</div>
+    <div class="intro-title" id="endingTitle">Cambridge</div>
+    <div class="amber-rule"></div>
+    <div class="intro-body" id="endingBody"></div>
+    <div class="amber-rule"></div>
+    <div style="font-family:'Courier New',monospace;font-size:9px;color:var(--blue2);letter-spacing:0.15em;margin-bottom:20px;" id="endingSummary"></div>
+    <button class="btn-primary" onclick="restartChapter()">Play Again</button>
+  </div>
+</div>
+
+<script src="zoraver-chapter2.js"></script>
+</body>
+</html>
